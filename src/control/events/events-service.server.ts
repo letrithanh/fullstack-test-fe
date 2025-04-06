@@ -20,4 +20,16 @@ export default class EventsServerService {
         });
         return await response.json();
     }
+
+    public async updateEvent(data: Event) {
+        const url = `${this.EVENTS_URL}/${data.id}`;
+        const response = await fetch(url, {
+            method: "PUT",
+            body: JSON.stringify(data),
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+        return await response.json();
+    }
 }

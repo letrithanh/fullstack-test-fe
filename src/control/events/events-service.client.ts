@@ -18,4 +18,13 @@ export class EventsClientService {
         });
         return await response.json();
     }
+
+    public async updateEvent(data: Event) {
+        const url = `${this.EVENTS_PATH}/${data.id}`;
+        const response = await fetch(url, {
+            method: "PUT",
+            body: JSON.stringify(data)
+        });
+        return await response.json();
+    }
 }

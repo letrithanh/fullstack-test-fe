@@ -16,11 +16,15 @@ const Input = (props: InputProps) => {
                         type={props.type}
                         name={props.name}
                         id={props.id}
-                        className={`shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md ${customInputFieldClassName}`}
+                        className={`block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6 ${customInputFieldClassName}`}
                         placeholder={props.placeholder}
                         onChange={props.onChange}
                         value={props.value}
+                        disabled={props.disabled}
+                        min={props.min}
+                        max={props.max}
                     />
+                    
                 </div>
 
                 {/* DESCRIPTION */}
@@ -44,12 +48,15 @@ const Input = (props: InputProps) => {
                         type={props.type}
                         name={props.name}
                         id={props.id}
-                        className={`block w-full pr-10 border-red-300 text-red-900 placeholder-red-300 focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm rounded-md ${customInputFieldClassName}`}
+                        className={`block w-full rounded-md bg-white px-3 py-1.5 text-base text-red-900 outline-1 -outline-offset-1 outline-red-300 placeholder:text-red-400 focus:outline-2 focus:-outline-offset-2 focus:outline-red-600 sm:text-sm/6 ${customInputFieldClassName}`}
                         placeholder={props.placeholder}
                         aria-invalid="true"
                         aria-describedby={`${props.name}-${props.id}-error`}
                         onChange={props.onChange}
                         value={props.value}
+                        disabled={props.disabled}
+                        min={props.min}
+                        max={props.max}
                     />
                     <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
                         <ExclamationCircleIcon

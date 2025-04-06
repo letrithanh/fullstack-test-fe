@@ -143,8 +143,19 @@ export default function EventFormWidget() {
                 isError: true,
                 errorMessage: (
                     <>
-                        Max attendee must greater than 0, and less than or
-                        equals to 100
+                        Max attendee must greater than 0, and less than or equals to 100
+                    </>
+                ),
+            };
+        }
+
+        const notValidEditMaxAttendee = isEditMode() && parseInt(`${assignedSelectedEvent.event?.joinedAttendee}`) > parseInt(assignedMaxAttendee.value)
+        if (notValidEditMaxAttendee) {
+            return {
+                isError: true,
+                errorMessage: (
+                    <>
+                        Max attendees must less than joined attendee
                     </>
                 ),
             };

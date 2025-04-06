@@ -8,15 +8,18 @@ import DateFormatter from "@/utils/date-formatter";
 import { DatePickerProps } from "./date-picker.interface";
 
 export default function DatePicker(props: DatePickerProps) {
-
     const [displayModal, setDisplayModal] = useState(false);
 
     const [date, setDate] = useState(props.date);
     const [selectedDate, setSelectedDate] = useState(props.date);
 
     function getRecentDaysOfLastMonth() {
-        const lastDayPrevMonth = new Date(date.getFullYear(), date.getMonth(), 0);
-        
+        const lastDayPrevMonth = new Date(
+            date.getFullYear(),
+            date.getMonth(),
+            0
+        );
+
         const dayOfWeek = lastDayPrevMonth.getDay();
         const diffToMonday = (dayOfWeek + 6) % 7;
 
@@ -24,7 +27,11 @@ export default function DatePicker(props: DatePickerProps) {
         lastMonday.setDate(lastDayPrevMonth.getDate() - diffToMonday);
 
         const days = [];
-        const day = new Date(lastDayPrevMonth.getFullYear(), lastDayPrevMonth.getMonth(), lastMonday.getDate());
+        const day = new Date(
+            lastDayPrevMonth.getFullYear(),
+            lastDayPrevMonth.getMonth(),
+            lastMonday.getDate()
+        );
 
         while (day.getMonth() === lastDayPrevMonth.getMonth()) {
             days.push(new Date(day));
@@ -36,7 +43,7 @@ export default function DatePicker(props: DatePickerProps) {
                 date: DateFormatter.format(day, "yyyy-MM-dd"),
                 isCurrentMonth: false,
                 isToday: false,
-                isSelected: isSelectedDate(day)
+                isSelected: isSelectedDate(day),
             };
         });
     }
@@ -58,22 +65,30 @@ export default function DatePicker(props: DatePickerProps) {
                 date: DateFormatter.format(day, "yyyy-MM-dd"),
                 isCurrentMonth: true,
                 isToday: isToday(day),
-                isSelected: isSelectedDate(day)
+                isSelected: isSelectedDate(day),
             };
         });
     }
 
     function getRecentDaysOfNextMonth() {
-        const firstDayNextMonth = new Date(date.getFullYear(), date.getMonth() + 1, 1);
+        const firstDayNextMonth = new Date(
+            date.getFullYear(),
+            date.getMonth() + 1,
+            1
+        );
         const dayOfWeek = firstDayNextMonth.getDay();
         const daysToAdd = (7 - dayOfWeek) % 7;
         const nextSunday = new Date(firstDayNextMonth);
         nextSunday.setDate(firstDayNextMonth.getDate() + daysToAdd);
         const days = [];
-        const day = new Date(firstDayNextMonth.getFullYear(), firstDayNextMonth.getMonth(), 1);
+        const day = new Date(
+            firstDayNextMonth.getFullYear(),
+            firstDayNextMonth.getMonth(),
+            1
+        );
 
         while (day.getDate() <= nextSunday.getDate()) {
-            days.push(new Date(day)); 
+            days.push(new Date(day));
             day.setDate(day.getDate() + 1);
         }
 
@@ -82,7 +97,7 @@ export default function DatePicker(props: DatePickerProps) {
                 date: DateFormatter.format(day, "yyyy-MM-dd"),
                 isCurrentMonth: false,
                 isToday: false,
-                isSelected: isSelectedDate(day)
+                isSelected: isSelectedDate(day),
             };
         });
     }
@@ -99,7 +114,7 @@ export default function DatePicker(props: DatePickerProps) {
     const days = [
         ...getRecentDaysOfLastMonth(),
         ...getAllDaysOfMonth(),
-        ...getRecentDaysOfNextMonth()
+        ...getRecentDaysOfNextMonth(),
     ];
 
     function isSelectedDate(checkedDate: Date) {
@@ -107,7 +122,7 @@ export default function DatePicker(props: DatePickerProps) {
             checkedDate.getDate() === selectedDate.getDate() &&
             checkedDate.getMonth() === selectedDate.getMonth() &&
             checkedDate.getFullYear() === selectedDate.getFullYear()
-        )
+        );
     }
 
     function renderCalendar() {
@@ -115,12 +130,18 @@ export default function DatePicker(props: DatePickerProps) {
             <div>
                 <div className="flex items-center">
                     <h2 className="flex-auto text-sm font-semibold text-gray-900">
-                        {`${date.toLocaleString('en-US', { month: 'long' })} ${date.getFullYear()}`}
+                        {`${date.toLocaleString("en-US", {
+                            month: "long",
+                        })} ${date.getFullYear()}`}
                     </h2>
                     <button
                         type="button"
                         className="-my-1.5 flex flex-none items-center justify-center p-1.5 text-gray-400 hover:text-gray-500 cursor-pointer"
-                        onClick={() => setDate(new Date(date.getFullYear(), date.getMonth(), 0))}
+                        onClick={() =>
+                            setDate(
+                                new Date(date.getFullYear(), date.getMonth(), 0)
+                            )
+                        }
                     >
                         <span className="sr-only">Previous month</span>
                         <ChevronLeftIcon
@@ -131,7 +152,15 @@ export default function DatePicker(props: DatePickerProps) {
                     <button
                         type="button"
                         className="-my-1.5 -mr-1.5 ml-2 flex flex-none items-center justify-center p-1.5 text-gray-400 hover:text-gray-500 cursor-pointer"
-                        onClick={() => setDate(new Date(date.getFullYear(), date.getMonth() + 1, 1))}
+                        onClick={() =>
+                            setDate(
+                                new Date(
+                                    date.getFullYear(),
+                                    date.getMonth() + 1,
+                                    1
+                                )
+                            )
+                        }
                     >
                         <span className="sr-only">Next month</span>
                         <ChevronRightIcon
@@ -184,10 +213,15 @@ export default function DatePicker(props: DatePickerProps) {
                                         "font-semibold",
                                     "mx-auto flex size-8 items-center justify-center rounded-full cursor-pointer"
                                 )}
-                                onClick={() => setSelectedDate(new Date(day.date))}
+                                onClick={() =>
+                                    setSelectedDate(new Date(day.date))
+                                }
                             >
                                 <time dateTime={day.date}>
-                                    {day.date?.split("-").pop()?.replace(/^0/, "")}
+                                    {day.date
+                                        ?.split("-")
+                                        .pop()
+                                        ?.replace(/^0/, "")}
                                 </time>
                             </button>
                         </div>
@@ -218,9 +252,7 @@ export default function DatePicker(props: DatePickerProps) {
                 {props.label && (
                     <>
                         {/* LEFT LABEL */}
-                        <label
-                            className="block text-sm/6 font-medium text-gray-900"
-                        >
+                        <label className="block text-sm/6 font-medium text-gray-900">
                             {props.label}
                         </label>
                         {/* LEFT LABEL */}
@@ -236,22 +268,41 @@ export default function DatePicker(props: DatePickerProps) {
                 )}
                 {/* LABEL */}
             </div>
-            <div className="mt-2 grid grid-cols-1 relative" >
-                <div className="absolute h-full w-full" onClick={() => setDisplayModal(true)}></div>
+            <div className="mt-2 grid grid-cols-1 relative">
+                <div
+                    className="absolute h-full w-full"
+                    onClick={() => setDisplayModal(true)}
+                ></div>
                 <input
                     type="text"
                     disabled={true}
                     placeholder="YYYY-MM-DD"
-                    className="col-start-1 row-start-1 block w-full rounded-md bg-white py-1.5 pr-10 pl-3 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:pr-9 sm:text-sm/6"
+                    className={CLASS_JOINER(
+                        "col-start-1 row-start-1 block w-full rounded-md bg-white py-1.5 pr-10 pl-3 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:pr-9 sm:text-sm/6",
+                        props.isError ? "text-red-600 outline-red-300 focus:outline-red-600" : ""
+                    )}
                     value={DateFormatter.format(props.date, "yyyy-MM-dd")}
                 />
                 <CalendarDaysIcon
                     aria-hidden="true"
-                    className="pointer-events-none col-start-1 row-start-1 mr-3 size-5 self-center justify-self-end text-gray-400 sm:size-4"
+                    className={CLASS_JOINER(
+                        "pointer-events-none col-start-1 row-start-1 mr-3 size-5 self-center justify-self-end text-gray-400 sm:size-4",
+                        props.isError ? "text-red-400" : ""
+                    )}
                 />
             </div>
-            <InputModal 
-                open={displayModal} 
+            {/* ERROR MESSAGE */}
+            {props.errorMessage && (
+                <p
+                    className="mt-2 text-sm text-red-600"
+                    id={`datepicker-error`}
+                >
+                    {props.errorMessage}
+                </p>
+            )}
+            {/* ERROR MESSAGE */}
+            <InputModal
+                open={displayModal}
                 onSecondary={onSecondaryClicked}
                 onPrimary={onPrimaryClicked}
                 textPrimary="Select"

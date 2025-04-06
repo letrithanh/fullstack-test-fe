@@ -1,8 +1,8 @@
 import React from "react";
-import { InputProps } from "./input.interface";
 import ExclamationCircleIcon from "@heroicons/react/24/outline/ExclamationCircleIcon";
+import { TextAreaProps } from "./textarea.interface";
 
-const Input = (props: InputProps) => {
+const TextArea = (props: TextAreaProps) => {
     const customInputFieldClassName = props.customInputFieldClassName
         ? props.customInputFieldClassName
         : "";
@@ -12,17 +12,14 @@ const Input = (props: InputProps) => {
             <>
                 {/* VALID */}
                 <div className="mt-1">
-                    <input
-                        type={props.type}
+                    <textarea
                         name={props.name}
                         id={props.id}
                         className={`block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6 ${customInputFieldClassName}`}
                         placeholder={props.placeholder}
                         onChange={props.onChange}
                         value={props.value}
-                        disabled={props.disabled}
-                        min={props.min}
-                        max={props.max}
+                        rows={props.rows}
                     />
                     
                 </div>
@@ -44,8 +41,7 @@ const Input = (props: InputProps) => {
             <>
                 {/* INVALID */}
                 <div className="mt-1 relative rounded-md shadow-sm">
-                    <input
-                        type={props.type}
+                    <textarea
                         name={props.name}
                         id={props.id}
                         className={`block w-full rounded-md bg-white px-3 py-1.5 text-base text-red-900 outline-1 -outline-offset-1 outline-red-300 placeholder:text-red-400 focus:outline-2 focus:-outline-offset-2 focus:outline-red-600 sm:text-sm/6 ${customInputFieldClassName}`}
@@ -54,9 +50,7 @@ const Input = (props: InputProps) => {
                         aria-describedby={`${props.name}-${props.id}-error`}
                         onChange={props.onChange}
                         value={props.value}
-                        disabled={props.disabled}
-                        min={props.min}
-                        max={props.max}
+                        rows={props.rows}
                     />
                     <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
                         <ExclamationCircleIcon
@@ -120,4 +114,4 @@ const Input = (props: InputProps) => {
     );
 };
 
-export default Input;
+export default TextArea;

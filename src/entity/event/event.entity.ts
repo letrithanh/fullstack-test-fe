@@ -8,5 +8,5 @@ export interface Event {
     createdAt?: Date;
     updatedAt?: Date;
     deleted?: boolean;
-    joinedAttendee: number;
+    joinedAttendee?: number;
 }

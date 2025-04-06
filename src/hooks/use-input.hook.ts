@@ -2,7 +2,7 @@ import { useState } from "react"
 
 export interface AssignedInput {
     value: string,
-    onChange: (event: React.ChangeEvent<HTMLInputElement>) => void
+    onChange: (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void
 }
 
 export interface InputAction {

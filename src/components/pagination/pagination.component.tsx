@@ -108,7 +108,7 @@ export default function Pagination(props: PaginationProps) {
         const renderedCollection: JSX.Element[] = [];
         arrUniquePage.forEach((each, index) => {
             if (index > 0 && arrUniquePage[index - 1] + 1 !== each) {
-                renderedCollection.push(renderDotDotDot());
+                renderedCollection.push(renderDotDotDot(index));
             }
             renderedCollection.push(renderPageNumber(each));
         });
@@ -121,9 +121,9 @@ export default function Pagination(props: PaginationProps) {
         );
     }
 
-    function renderDotDotDot() {
+    function renderDotDotDot(index: number) {
         return (
-            <span key={"..."} className="border-transparent text-gray-500 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium">
+            <span key={`...-${index}`} className="border-transparent text-gray-500 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium">
                 ...
             </span>
         );

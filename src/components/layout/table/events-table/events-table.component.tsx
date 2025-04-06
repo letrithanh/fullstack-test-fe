@@ -23,11 +23,16 @@ export default function EventsTable(props: EventsTableProps) {
 
     function calculateNumberOfPages(): number {
         return Math.ceil(props.events.length / MAX_ITEMS_PER_PAGE);
-    }
-    
+    }   
 
     function getEvents(): EventsTableItem[] {
         const paginatedEvents = paginateEvents(props.events, activePage, MAX_ITEMS_PER_PAGE);
+        const hasEvents = props.events.length > 0;
+        const notValidActivePage = activePage > calculateNumberOfPages()
+        if (hasEvents && notValidActivePage) {
+            setActivePage(1)
+        }
+
         return paginatedEvents.sort((e1, e2) => new Date(e1.date).getTime() - new Date(e2.date).getTime());
     }
 
@@ -180,13 +185,16 @@ export default function EventsTable(props: EventsTableProps) {
                     </div>
                 </div>
             </div>
-            <div className="">
-                <Pagination 
-                    numberOfPage={calculateNumberOfPages()}
-                    activePage={activePage}
-                    onPageClicked={onPageClicked}
-                />
-            </div>
+            {
+                getEvents().length > 0 &&
+                <div className="">
+                    <Pagination 
+                        numberOfPage={calculateNumberOfPages()}
+                        activePage={activePage}
+                        onPageClicked={onPageClicked}
+                    />
+                </div>
+            }
         </div>
     );
 }

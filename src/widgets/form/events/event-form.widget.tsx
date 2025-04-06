@@ -191,7 +191,6 @@ export default function EventFormWidget() {
             }
 
             if (isEditMode()) {
-                console.log("isEditMode")
                 eventsClientService
                     .updateEvent(data)
                     .then(() => {

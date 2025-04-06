@@ -21,7 +21,6 @@ export class EventsClientService {
 
     public async updateEvent(data: Event) {
         const url = `${this.EVENTS_PATH}/${data.id}`;
-        console.log({url})
         const response = await fetch(url, {
             method: "PUT",
             body: JSON.stringify(data)

@@ -5,21 +5,17 @@ import EventsAdapter from "@/control/events/events-adapter";
 import { EventsClientService } from "@/control/events/events-service.client";
 import { Event } from "@/entity/event/event.entity";
 import { useApplication } from "@/hooks/client/application/application.hook";
-import { ADD_EVENT_PATH } from "@/utils/application-path";
+import { EVENT_MANAGEMENT_PATH, EVENT_DETAIL_PATH } from "@/utils/application-path";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function EventsTableWidget() {
     const {
         search: [assignedSearch,],
+        selectedEvent: [, selectedEventAction]
     } = useApplication();
 
     const router = useRouter();
-
-    // TODO: Detail hander
-    const onEventClicked = (id: number) => {
-        alert(id);
-    };
 
     const [events, setEvents] = useState<Event[]>([]);
 
@@ -36,12 +32,20 @@ export default function EventsTableWidget() {
     }, []);
 
     function filter(events: Event[]): Event[] {
-        return events.filter(event => event.title.toLowerCase().indexOf(assignedSearch.value.trim()) >= 0)
+        return events.filter(event => event.title.toLowerCase().indexOf(assignedSearch.value.trim()) >= 0);
     }
 
     function onAddEventClick() {
-        router.push(ADD_EVENT_PATH)
+        router.push(EVENT_MANAGEMENT_PATH);
     }
+
+    function onEventClicked(id: number) {
+        if (events.length > 0) {
+            const filteredEvent = events.filter(e => e.id == id)[0];
+            selectedEventAction.update({...filteredEvent});
+            router.push(EVENT_DETAIL_PATH);
+        }
+    };
 
     return (
         <EventsTable

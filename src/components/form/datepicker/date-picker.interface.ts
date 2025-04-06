@@ -7,4 +7,8 @@ export interface DatePickerProps {
     rightLabel?: string;
 
     onSelectDate?: (date: Date) => void;
+
+    errorMessage?: string;
+
+    isError?: boolean;
 }

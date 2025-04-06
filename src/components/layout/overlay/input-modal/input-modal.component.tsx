@@ -2,8 +2,11 @@
 
 import { Dialog, DialogBackdrop, DialogPanel } from "@headlessui/react";
 import { InputModalProps } from "./input-modal.interface";
+import { CLASS_JOINER } from "@/utils/class-handler";
 
 export default function InputModal(props: InputModalProps) {
+
+    const customPrimaryClassName = props.primaryClassName || "";
 
     function onClose(value: boolean) {
         if (props.onClose) {
@@ -43,7 +46,10 @@ export default function InputModal(props: InputModalProps) {
                             <button
                                 type="button"
                                 onClick={onPrimaryClicked}
-                                className="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 sm:col-start-2 cursor-pointer"
+                                className={CLASS_JOINER(
+                                    "inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 sm:col-start-2 cursor-pointer",
+                                    customPrimaryClassName
+                                )}
                             >
                                 {props.textPrimary}
                             </button>

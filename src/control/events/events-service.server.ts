@@ -32,4 +32,11 @@ export default class EventsServerService {
         });
         return await response.json();
     }
+
+    public async deleteEvent(id: number) {
+        const url = `${this.EVENTS_URL}/${id}`;
+        return await fetch(url, {
+            method: "DELETE"
+        });
+    }
 }

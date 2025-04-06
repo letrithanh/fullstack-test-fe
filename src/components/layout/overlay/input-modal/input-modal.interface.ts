@@ -14,6 +14,8 @@ export interface InputModalProps {
 
     textSecondary: string;
 
-    children: ReactNode
+    children: ReactNode;
+
+    primaryClassName?: string;
 
 }

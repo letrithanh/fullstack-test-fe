@@ -27,4 +27,12 @@ export class EventsClientService {
         });
         return await response.json();
     }
+
+    public async deleteEvent(id: number | string) {
+        const url = `${this.EVENTS_PATH}/${id}`;
+        const response = await fetch(url, {
+            method: "DELETE"
+        })
+        return await response.json();
+    }
 }

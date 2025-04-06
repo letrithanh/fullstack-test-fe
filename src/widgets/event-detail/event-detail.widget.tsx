@@ -1,16 +1,19 @@
 "use client";
 import FormStackedLayout from "@/components/layout/form-stacked-layout/form-stacked-layout.component";
+import InputModal from "@/components/layout/overlay/input-modal/input-modal.component";
+import { EventsClientService } from "@/control/events/events-service.client";
 import { useApplication } from "@/hooks/client/application/application.hook";
 import { EVENT_MANAGEMENT_PATH, HOME_PATH } from "@/utils/application-path";
 import DateFormatter from "@/utils/date-formatter";
 import {
     ArrowLeftIcon,
     CalendarDateRangeIcon,
+    ExclamationTriangleIcon,
     MapPinIcon,
     UserGroupIcon,
 } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export default function EventDetailWidget() {
     
@@ -20,6 +23,8 @@ export default function EventDetailWidget() {
 
     const router = useRouter();
 
+    const [displayDeleteModal, setDisplayDeleteModal] = useState(false);
+
     useEffect(() => {
         if (assignedSelectedEvent.event == null) {
             router.push(HOME_PATH);
@@ -28,82 +33,119 @@ export default function EventDetailWidget() {
 
     function onExit() {
         selectedEventAction.reset();
-        router.push(HOME_PATH)
+        router.push(HOME_PATH);
     }
 
     function onEdit() {
-        router.push(EVENT_MANAGEMENT_PATH)
+        router.push(EVENT_MANAGEMENT_PATH);
+    }
+
+    function onDeleteClick() {
+        setDisplayDeleteModal(true);
+    }
+
+    function onCancelDeleteModalClick() {
+        setDisplayDeleteModal(false);
+    }
+
+    function onConfirmDeleteModalClick() {
+        setDisplayDeleteModal(false);
+        const eventsClientService = new EventsClientService();
+        eventsClientService
+            .deleteEvent(`${assignedSelectedEvent.event?.id}`)
+            .then(() => {
+                selectedEventAction.reset();
+                router.push(HOME_PATH);
+            }).catch(onerror => console.error(onerror));
     }
 
     return (
-        <FormStackedLayout>
-            <div className="md:flex md:items-center md:justify-between">
-                <div className="min-w-0 flex-1">
-                    <h2 className="text-2xl/7 font-bold text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight flex items-center gap-4">
-                        <ArrowLeftIcon className="h-8 w-8 cursor-pointer" onClick={onExit}/>
-                        {assignedSelectedEvent.event?.title}
-                    </h2>
+        <>
+            <FormStackedLayout>
+                <div className="md:flex md:items-center md:justify-between">
+                    <div className="min-w-0 flex-1">
+                        <h2 className="text-2xl/7 font-bold text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight flex items-center gap-4">
+                            <ArrowLeftIcon className="h-8 w-8 cursor-pointer" onClick={onExit}/>
+                            {assignedSelectedEvent.event?.title}
+                        </h2>
+                    </div>
+                    <div className="mt-4 flex md:mt-0 md:ml-4">
+                        <button
+                            type="button"
+                            className="inline-flex items-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-xs ring-red-100 ring-inset hover:bg-red-700 cursor-pointer"
+                            onClick={onDeleteClick}
+                        >
+                            Delete
+                        </button>
+                        <button
+                            type="button"
+                            className="ml-3 rounded-sm bg-white px-4 py-2 text-sm font-semibold text-gray-900 ring-1 shadow-xs ring-gray-300 ring-inset hover:bg-gray-50 cursor-pointer"
+                            onClick={onEdit}
+                        >
+                            Edit
+                        </button>
+                    </div>
                 </div>
-                <div className="mt-4 flex md:mt-0 md:ml-4">
+                <div className="divide-y divide-gray-200 overflow-hidden rounded-lg bg-white shadow-sm my-6">
+                    <div className="px-4 py-4 sm:px-6">
+                        {/* Content goes here */}
+                        {/* We use less vertical padding on card footers at all sizes than on headers or body sections */}
+                        <div>
+                            {assignedSelectedEvent.event?.description}
+                        </div>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-5 px-4 py-5 sm:p-6">
+                        <div className="overflow-hidden rounded-lg bg-gray-200 text-gray-700 shadow-md grid place-items-center">
+                            <div className="px-4 py-5 sm:p-6 flex flex-col items-center">
+                                <MapPinIcon className="h-16 w-16" />
+                                <span className="grid place-items-center truncate w-full max-w-xs overflow-hidden text-ellipsis whitespace-nowrap">
+                                    {assignedSelectedEvent.event?.location}
+                                </span>
+                            </div>
+                        </div>
+                        <div className="overflow-hidden rounded-lg bg-gray-200 text-gray-700 shadow-md grid place-items-center">
+                            <div className="px-4 py-5 sm:p-6 flex flex-col items-center">
+                                <CalendarDateRangeIcon className="h-16 w-16" />
+                                <span className="grid place-items-center truncate w-full max-w-xs overflow-hidden text-ellipsis whitespace-nowrap">
+                                    {DateFormatter.format(new Date(assignedSelectedEvent.event?.date || new Date()), "dd-MM-yyyy")}
+                                </span>
+                            </div>
+                        </div>
+                        <div className="overflow-hidden rounded-lg bg-gray-200 text-gray-700 shadow-md grid place-items-center">
+                            <div className="px-4 py-5 sm:p-6 flex flex-col items-center">
+                                <UserGroupIcon className="h-16 w-16" />
+                                <span className="grid place-items-center truncate w-full max-w-xs overflow-hidden text-ellipsis whitespace-nowrap">
+                                    {`${assignedSelectedEvent.event?.joinedAttendee}/${assignedSelectedEvent.event?.maxAttendees}`}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div className="">
                     <button
                         type="button"
-                        className="inline-flex items-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-xs ring-red-100 ring-inset hover:bg-red-700 cursor-pointer"
-                        
+                        className="w-full grid place-items-center items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-indigo-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 cursor-pointer"
                     >
-                        Delete
-                    </button>
-                    <button
-                        type="button"
-                        className="ml-3 rounded-sm bg-white px-4 py-2 text-sm font-semibold text-gray-900 ring-1 shadow-xs ring-gray-300 ring-inset hover:bg-gray-50 cursor-pointer"
-                        onClick={onEdit}
-                    >
-                        Edit
+                        Register
                     </button>
                 </div>
-            </div>
-            <div className="divide-y divide-gray-200 overflow-hidden rounded-lg bg-white shadow-sm my-6">
-                <div className="px-4 py-4 sm:px-6">
-                    {/* Content goes here */}
-                    {/* We use less vertical padding on card footers at all sizes than on headers or body sections */}
-                    <div>
-                        {assignedSelectedEvent.event?.description}
-                    </div>
+            </FormStackedLayout>
+
+            {/* DELETE MODAL */}
+            <InputModal 
+                open={displayDeleteModal} 
+                textPrimary={"Delete"} 
+                textSecondary={"Cancel"} 
+                primaryClassName="text-white shadow-xs ring-red-100 ring-inset bg-red-600 hover:bg-red-700"
+                onSecondary={onCancelDeleteModalClick}
+                onPrimary={onConfirmDeleteModalClick}
+            >
+                <div className="flex flex-col w-full items-center">
+                    <ExclamationTriangleIcon aria-hidden="true" className="size-16 text-red-600" />
+                    <div className="font-semibold">Are you sure to delete this event?</div>
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-5 px-4 py-5 sm:p-6">
-                    <div className="overflow-hidden rounded-lg bg-gray-200 text-gray-700 shadow-md grid place-items-center">
-                        <div className="px-4 py-5 sm:p-6 flex flex-col items-center">
-                            <MapPinIcon className="h-16 w-16" />
-                            <span className="grid place-items-center truncate w-full max-w-xs overflow-hidden text-ellipsis whitespace-nowrap">
-                                {assignedSelectedEvent.event?.location}
-                            </span>
-                        </div>
-                    </div>
-                    <div className="overflow-hidden rounded-lg bg-gray-200 text-gray-700 shadow-md grid place-items-center">
-                        <div className="px-4 py-5 sm:p-6 flex flex-col items-center">
-                            <CalendarDateRangeIcon className="h-16 w-16" />
-                            <span className="grid place-items-center truncate w-full max-w-xs overflow-hidden text-ellipsis whitespace-nowrap">
-                                {DateFormatter.format(new Date(assignedSelectedEvent.event?.date || new Date()), "dd-MM-yyyy")}
-                            </span>
-                        </div>
-                    </div>
-                    <div className="overflow-hidden rounded-lg bg-gray-200 text-gray-700 shadow-md grid place-items-center">
-                        <div className="px-4 py-5 sm:p-6 flex flex-col items-center">
-                            <UserGroupIcon className="h-16 w-16" />
-                            <span className="grid place-items-center truncate w-full max-w-xs overflow-hidden text-ellipsis whitespace-nowrap">
-                                {`${assignedSelectedEvent.event?.joinedAttendee}/${assignedSelectedEvent.event?.maxAttendees}`}
-                            </span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div className="">
-                <button
-                    type="button"
-                    className="w-full grid place-items-center items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-indigo-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 cursor-pointer"
-                >
-                    Register
-                </button>
-            </div>
-        </FormStackedLayout>
+            </InputModal>
+            {/* DELETE MODAL */}
+        </>
     );
 }

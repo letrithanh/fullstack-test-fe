@@ -1,7 +1,40 @@
+"use client"
+
 import { CLASS_JOINER } from "@/utils/class-handler";
-import { EventsTableProps } from "./events-table.interface";
+import { EventsTableItem, EventsTableProps } from "./events-table.interface";
+import Pagination from "@/components/pagination/pagination.component";
+import { useState } from "react";
 
 export default function EventsTable(props: EventsTableProps) {
+
+    const MAX_ITEMS_PER_PAGE = props.maxItemsPerPage || 5;
+    
+    const [activePage, setActivePage] = useState(1);
+
+    function paginateEvents(
+        events: EventsTableItem[],
+        activePage: number,
+        maxItemsPerPage: number = 10
+    ): EventsTableItem[] {
+        const startIndex = (activePage - 1) * maxItemsPerPage;
+        const endIndex = startIndex + maxItemsPerPage;
+        return events.slice(startIndex, endIndex);
+    }
+
+    function calculateNumberOfPages(): number {
+        return Math.ceil(props.events.length / MAX_ITEMS_PER_PAGE);
+    }
+    
+
+    function getEvents(): EventsTableItem[] {
+        const paginatedEvents = paginateEvents(props.events, activePage, MAX_ITEMS_PER_PAGE);
+        return paginatedEvents.sort((e1, e2) => new Date(e1.date).getTime() - new Date(e2.date).getTime());
+    }
+
+    function onPageClicked(pageNumber: number) {
+        setActivePage(pageNumber)
+    }
+
     return (
         <div className="px-4 sm:px-6 lg:px-8">
             <div className="sm:flex sm:items-center">
@@ -20,6 +53,7 @@ export default function EventsTable(props: EventsTableProps) {
                         <button
                             type="button"
                             className="block rounded-md bg-gray-800 px-3 py-2 text-center text-sm font-semibold text-white shadow-xs hover:bg-gray-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600 cursor-pointer"
+                            onClick={props.onActionButtonClicked}
                         >
                             {props.textActionButton}
                         </button>
@@ -29,12 +63,12 @@ export default function EventsTable(props: EventsTableProps) {
             <div className="mt-8 flow-root">
                 <div className="-mx-4 -my-2 sm:-mx-6 lg:-mx-8">
                     <div className="inline-block min-w-full py-2 align-middle">
-                        {props.events.length == 0 && (
-                            <div className="text-base font-semibold text-gray-900 grid place-items-center">
+                        {getEvents().length == 0 && (
+                            <div className="py-4 text-base font-semibold text-gray-900 grid place-items-center">
                                 No Events
                             </div>
                         )}
-                        {props.events.length > 0 && (
+                        {getEvents().length > 0 && (
                             <table className="min-w-full border-separate border-spacing-0">
                                 <thead>
                                     <tr>
@@ -73,12 +107,12 @@ export default function EventsTable(props: EventsTableProps) {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {props.events.map((event, eventIndex) => (
+                                    {getEvents().map((event, eventIndex) => (
                                         <tr key={event.id}>
                                             <td
                                                 className={CLASS_JOINER(
                                                     eventIndex !==
-                                                        props.events.length - 1
+                                                        getEvents().length - 1
                                                         ? "border-b border-gray-200"
                                                         : "",
                                                     "py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-6 lg:pl-8"
@@ -89,7 +123,7 @@ export default function EventsTable(props: EventsTableProps) {
                                             <td
                                                 className={CLASS_JOINER(
                                                     eventIndex !==
-                                                        props.events.length - 1
+                                                        getEvents().length - 1
                                                         ? "border-b border-gray-200"
                                                         : "",
                                                     "px-3 py-4 text-sm whitespace-nowrap text-gray-500 sm:table-cell"
@@ -100,7 +134,7 @@ export default function EventsTable(props: EventsTableProps) {
                                             <td
                                                 className={CLASS_JOINER(
                                                     eventIndex !==
-                                                        props.events.length - 1
+                                                        getEvents().length - 1
                                                         ? "border-b border-gray-200"
                                                         : "",
                                                     "hidden px-3 py-4 text-sm whitespace-nowrap text-gray-500 lg:table-cell"
@@ -111,7 +145,7 @@ export default function EventsTable(props: EventsTableProps) {
                                             <td
                                                 className={CLASS_JOINER(
                                                     eventIndex !==
-                                                        props.events.length - 1
+                                                        getEvents().length - 1
                                                         ? "border-b border-gray-200"
                                                         : "",
                                                     "hidden px-3 py-4 text-sm whitespace-nowrap text-gray-500 lg:table-cell"
@@ -122,7 +156,7 @@ export default function EventsTable(props: EventsTableProps) {
                                             <td
                                                 className={CLASS_JOINER(
                                                     eventIndex !==
-                                                        props.events.length - 1
+                                                        getEvents().length - 1
                                                         ? "border-b border-gray-200"
                                                         : "",
                                                     "relative py-4 pr-4 pl-3 text-right text-sm font-medium whitespace-nowrap sm:pr-8 lg:pr-8"
@@ -145,6 +179,13 @@ export default function EventsTable(props: EventsTableProps) {
                         )}
                     </div>
                 </div>
+            </div>
+            <div className="">
+                <Pagination 
+                    numberOfPage={calculateNumberOfPages()}
+                    activePage={activePage}
+                    onPageClicked={onPageClicked}
+                />
             </div>
         </div>
     );

@@ -10,6 +10,7 @@ export interface EventsTableProps {
 
     events: EventsTableItem[];
 
+    maxItemsPerPage?: number;
 }
 
 export interface EventsTableItem {

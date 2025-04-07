@@ -12,7 +12,8 @@ export default function SearchStackedLayout(props: SearchStackedLayoutProps) {
             <div className="min-h-full">
                 <div className="bg-gray-800 pb-32">
                     <div className="mx-auto max-w-7xl px-2 sm:px-4 lg:px-8">
-                        <div className="relative flex h-16 items-center justify-between lg:border-b lg:border-gray-400/25">
+                        <div className="relative flex h-16 items-center justify-between lg:border-b lg:border-gray-400/25 flex-col">
+                            <div className="font-semibold text-white py-4 text-xl">Search</div>
                             <div className="grid w-full grid-cols-1">
                                 <input
                                     name="search"
@@ -32,7 +33,7 @@ export default function SearchStackedLayout(props: SearchStackedLayoutProps) {
                     </div>
                 </div>
 
-                <main className="-mt-24">
+                <main className="-mt-16">
                     <div className="mx-auto max-w-7xl px-4 pb-12 sm:px-6 lg:px-8">
                         <div className="rounded-lg bg-white px-5 py-6 shadow-sm sm:px-6">
                             {props.children}

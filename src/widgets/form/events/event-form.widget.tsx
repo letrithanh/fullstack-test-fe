@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import { HOME_PATH } from "@/utils/application-path";
 import { EventsClientService } from "@/control/events/events-service.client";
 import { useApplication } from "@/hooks/client/application/application.hook";
+import { EVENT_FORM_CMS } from "@/cms/event-form/event-form.cms";
 
 export default function EventFormWidget() {
     const router = useRouter();
@@ -23,6 +24,7 @@ export default function EventFormWidget() {
 
     const {
         selectedEvent: [assignedSelectedEvent, selectedEventAction],
+        languageCMS
     } = useApplication();
 
     useEffect(() => {
@@ -44,7 +46,7 @@ export default function EventFormWidget() {
         if ((titleAction.isValueChanged() || isSubmit) && isTitleBlank) {
             return {
                 isError: true,
-                errorMessage: <>Title must have value</>,
+                errorMessage: <>{EVENT_FORM_CMS.FORM_TITLE_ERROR_BLANK[languageCMS]}</>,
             };
         }
 
@@ -52,7 +54,7 @@ export default function EventFormWidget() {
         if (isExceedMaxLength) {
             return {
                 isError: true,
-                errorMessage: <>Max length is 100 characters</>,
+                errorMessage: <>{EVENT_FORM_CMS.FORM_TITLE_ERROR_MAX_LENGTH[languageCMS]}</>,
             };
         }
 
@@ -69,7 +71,7 @@ export default function EventFormWidget() {
         ) {
             return {
                 isError: true,
-                errorMessage: <>Description must have value</>,
+                errorMessage: <>{EVENT_FORM_CMS.FORM_DESCRIPTION_ERROR_BLANK[languageCMS]}</>,
             };
         }
 
@@ -77,7 +79,7 @@ export default function EventFormWidget() {
         if (isExceedMaxLength) {
             return {
                 isError: true,
-                errorMessage: <>Max length is 500 characters</>,
+                errorMessage: <>{EVENT_FORM_CMS.FORM_DESCRIPTION_ERROR_MAX_LENGTH[languageCMS]}</>,
             };
         }
 
@@ -106,7 +108,7 @@ export default function EventFormWidget() {
         if ((locationAction.isValueChanged() || isSubmit) && isLocationBlank) {
             return {
                 isError: true,
-                errorMessage: <>Location must have value</>,
+                errorMessage: <>{EVENT_FORM_CMS.FORM_LOCATION_ERROR_BLANK[languageCMS]}</>,
             };
         }
 
@@ -114,7 +116,7 @@ export default function EventFormWidget() {
         if (isExceedMaxLength) {
             return {
                 isError: true,
-                errorMessage: <>Max length is 200 characters</>,
+                errorMessage: <>{EVENT_FORM_CMS.FORM_LOCATION_ERROR_MAX_LENGTH[languageCMS]}</>,
             };
         }
 
@@ -131,7 +133,7 @@ export default function EventFormWidget() {
         ) {
             return {
                 isError: true,
-                errorMessage: <>Max attendee must have value</>,
+                errorMessage: <>{EVENT_FORM_CMS.FORM_MAX_ATTENDEE_ERROR_BLANK[languageCMS]}</>,
             };
         }
 
@@ -143,7 +145,7 @@ export default function EventFormWidget() {
                 isError: true,
                 errorMessage: (
                     <>
-                        Max attendee must greater than 0, and less than or equals to 100
+                        {EVENT_FORM_CMS.FORM_MAX_ATTENDEE_ERROR_RANGE[languageCMS]}
                     </>
                 ),
             };
@@ -155,7 +157,7 @@ export default function EventFormWidget() {
                 isError: true,
                 errorMessage: (
                     <>
-                        Max attendees must less than joined attendee
+                        {EVENT_FORM_CMS.FORM_MAX_ATTENDEE_ERROR_JOINED[languageCMS]}
                     </>
                 ),
             };
@@ -232,11 +234,10 @@ export default function EventFormWidget() {
             <div className="grid grid-cols-1 gap-x-8 gap-y-8 py-10 md:grid-cols-3">
                 <div className="px-4 sm:px-0">
                     <h2 className="text-base/7 font-semibold text-gray-900">
-                        Event
+                        {EVENT_FORM_CMS.EVENT_TITLE[languageCMS]}
                     </h2>
                     <p className="mt-1 text-sm/6 text-gray-600">
-                        This information will be displayed publicly so be
-                        careful what you create.
+                        {EVENT_FORM_CMS.EVENT_DESCRIPTION[languageCMS]}
                     </p>
                 </div>
 
@@ -245,9 +246,9 @@ export default function EventFormWidget() {
                         <div className="grid max-w-2xl grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                             <div className="col-span-full">
                                 <Input
-                                    label="Title"
-                                    rightLabel="required"
-                                    placeholder="Event's name"
+                                    label={EVENT_FORM_CMS.FORM_TITLE_LABEL[languageCMS]}
+                                    rightLabel={EVENT_FORM_CMS.REQUIRED_LABEL[languageCMS]}
+                                    placeholder={EVENT_FORM_CMS.FORM_TITLE_PLACEHOLDER[languageCMS]}
                                     {...assignedTitle}
                                     {...titleValidation()}
                                 />
@@ -255,10 +256,10 @@ export default function EventFormWidget() {
 
                             <div className="col-span-full">
                                 <TextArea
-                                    label="Description"
-                                    rightLabel="required"
+                                    label={EVENT_FORM_CMS.FORM_DESCRIPTION_LABEL[languageCMS]}
+                                    rightLabel={EVENT_FORM_CMS.REQUIRED_LABEL[languageCMS]}
                                     rows={5}
-                                    placeholder="Event's content"
+                                    placeholder={EVENT_FORM_CMS.FORM_DESCRIPTION_PLACEHOLDER[languageCMS]}
                                     {...assignedDescription}
                                     {...descriptionValidation()}
                                 />
@@ -266,21 +267,21 @@ export default function EventFormWidget() {
 
                             <div className="col-span-full relative">
                                 <DatePicker
-                                    label="Date"
-                                    rightLabel="required"
+                                    label={EVENT_FORM_CMS.FORM_DATE_LABEL[languageCMS]}
+                                    rightLabel={EVENT_FORM_CMS.REQUIRED_LABEL[languageCMS]}
                                     onSelectDate={onSelectDate}
                                     date={date}
                                     key={date.toISOString()}
                                     isError={!isDateValid(date)}
-                                    errorMessage={isDateValid(date) ? undefined : "Date must greater than today"}
+                                    errorMessage={isDateValid(date) ? undefined : EVENT_FORM_CMS.FORM_DATE_ERROR_PAST[languageCMS]}
                                 />
                             </div>
 
                             <div className="col-span-full">
                                 <Input
-                                    label="Location"
-                                    rightLabel="required"
-                                    placeholder="Event's location"
+                                    label={EVENT_FORM_CMS.FORM_LOCATION_LABEL[languageCMS]}
+                                    rightLabel={EVENT_FORM_CMS.REQUIRED_LABEL[languageCMS]}
+                                    placeholder={EVENT_FORM_CMS.FORM_LOCATION_PLACEHOLDER[languageCMS]}
                                     {...assignedLocation}
                                     {...locationValidation()}
                                 />
@@ -289,8 +290,8 @@ export default function EventFormWidget() {
                             <div className="col-span-full">
                                 <Input
                                     type="number"
-                                    label="Max Attendee"
-                                    rightLabel="required"
+                                    label={EVENT_FORM_CMS.FORM_MAX_ATTENDEE_LABEL[languageCMS]}
+                                    rightLabel={EVENT_FORM_CMS.REQUIRED_LABEL[languageCMS]}
                                     min={0}
                                     max={100}
                                     placeholder="0"
@@ -306,14 +307,14 @@ export default function EventFormWidget() {
                             className="text-sm/6 font-semibold text-gray-900 cursor-pointer"
                             onClick={onCancel}
                         >
-                            Cancel
+                            {EVENT_FORM_CMS.FORM_CANCEL_BUTTON[languageCMS]}
                         </button>
                         <button
                             type="submit"
                             className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 cursor-pointer"
                             onClick={onSave}
                         >
-                            Save
+                            {EVENT_FORM_CMS.FORM_SAVE_BUTTON[languageCMS]}
                         </button>
                     </div>
                 </form>

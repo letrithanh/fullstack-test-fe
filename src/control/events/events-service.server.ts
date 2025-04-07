@@ -67,7 +67,7 @@ export default class EventsServerService {
             throw new Error(await response.json())
         }
 
-        return await response.json();
+        return {"message": "deleted"};
     }
 
     public async register(eventId: number | string, attendee: Attendee) {

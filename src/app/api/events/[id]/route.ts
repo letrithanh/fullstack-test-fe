@@ -6,7 +6,8 @@ export async function PUT(request: Request) {
     const event: Event = await request.json();
     const eventsServerService = new EventsServerService();
     const updatedEvent = await eventsServerService.updateEvent(event);
-    return Response.json(updatedEvent);
+    
+    return Response.json(updatedEvent, { status: updatedEvent.status || 200 });
 }
 
 

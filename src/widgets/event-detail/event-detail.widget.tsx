@@ -1,4 +1,5 @@
 "use client";
+import { EVENT_DETAIL_CMS } from "@/cms/event-detail/event-detail.cms";
 import Input from "@/components/form/input/input.component";
 import RadioGroup from "@/components/form/radio-group/radio-group.component";
 import { RadioOption } from "@/components/form/radio-group/radio-group.interface";
@@ -28,6 +29,7 @@ export default function EventDetailWidget() {
 
     const {
         selectedEvent: [assignedSelectedEvent, selectedEventAction],
+        languageCMS
     } = useApplication();
 
     const router = useRouter();
@@ -82,7 +84,7 @@ export default function EventDetailWidget() {
         if ((fullnameAction.isValueChanged() || isSubmit) && isFullnameBlank) {
             return {
                 isError: true,
-                errorMessage: <>Full name must have value</>,
+                errorMessage: <>{EVENT_DETAIL_CMS.REGISTER_MODAL_FULLNAME_ERROR_BLANK[languageCMS]}</>,
             };
         }
 
@@ -90,7 +92,7 @@ export default function EventDetailWidget() {
         if (isExceedMaxLength) {
             return {
                 isError: true,
-                errorMessage: <>Max length is 20 characters</>,
+                errorMessage: <>{EVENT_DETAIL_CMS.REGISTER_MODAL_FULLNAME_ERROR_EXCEED_MAX_LENGTH[languageCMS]}</>,
             };
         }
 
@@ -111,7 +113,7 @@ export default function EventDetailWidget() {
         ) {
             return {
                 isError: true,
-                errorMessage: <>Invalid email</>,
+                errorMessage: <>{EVENT_DETAIL_CMS.REGISTER_MODAL_EMAIL_ERROR_INVALID_REGEX[languageCMS]}</>,
             };
         }
 
@@ -128,7 +130,7 @@ export default function EventDetailWidget() {
         ) {
             return {
                 isError: true,
-                errorMessage: <>Invalid phone number</>,
+                errorMessage: <>{EVENT_DETAIL_CMS.REGISTER_MODAL_PHONE_NUMBER_ERROR_INVALID_REGEX[languageCMS]}</>,
             };
         }
 
@@ -154,6 +156,7 @@ export default function EventDetailWidget() {
         emailAction.reset();
         phoneAction.reset();
         setSubmit(false);
+        setAttendeeErrorMessage("");
     }
 
     function onCancelRegisterClick() {
@@ -193,8 +196,8 @@ export default function EventDetailWidget() {
                             assignedSelectedEvent.event!.joinedAttendee! + 1,
                     });
                 })
-                .catch((onerror) => {
-                    setAttendeeErrorMessage(onerror.message);
+                .catch(() => {
+                    setAttendeeErrorMessage(EVENT_DETAIL_CMS.REGISTER_MODAL_RESPONSE_ERROR_MESSAGE[languageCMS]);
                 });
         }
     }
@@ -218,14 +221,14 @@ export default function EventDetailWidget() {
                             className="inline-flex items-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-xs ring-red-100 ring-inset hover:bg-red-700 cursor-pointer"
                             onClick={onDeleteClick}
                         >
-                            Delete
+                            {EVENT_DETAIL_CMS.DELETE_BUTTON[languageCMS]}
                         </button>
                         <button
                             type="button"
                             className="ml-3 rounded-sm bg-white px-4 py-2 text-sm font-semibold text-gray-900 ring-1 shadow-xs ring-gray-300 ring-inset hover:bg-gray-50 cursor-pointer"
                             onClick={onEdit}
                         >
-                            Edit
+                            {EVENT_DETAIL_CMS.EDIT_BUTTON[languageCMS]}
                         </button>
                     </div>
                 </div>
@@ -280,7 +283,7 @@ export default function EventDetailWidget() {
                         onClick={onRegisterClick}
                         disabled={notValidRegister()}
                     >
-                        Register
+                        {EVENT_DETAIL_CMS.REGISTER_BUTTON[languageCMS]}
                     </button>
                 </div>
             </FormStackedLayout>
@@ -288,8 +291,8 @@ export default function EventDetailWidget() {
             {/* DELETE MODAL */}
             <InputModal
                 open={displayDeleteModal}
-                textPrimary={"Delete"}
-                textSecondary={"Cancel"}
+                textPrimary={EVENT_DETAIL_CMS.DELETE_MODAL_PRIMARY_BUTTON[languageCMS]}
+                textSecondary={EVENT_DETAIL_CMS.DELETE_MODAL_SECONDARY_BUTTON[languageCMS]}
                 primaryClassName="text-white shadow-xs ring-red-100 ring-inset bg-red-600 hover:bg-red-700"
                 onSecondary={onCancelDeleteModalClick}
                 onPrimary={onConfirmDeleteModalClick}
@@ -300,7 +303,7 @@ export default function EventDetailWidget() {
                         className="size-16 text-red-600"
                     />
                     <div className="font-semibold">
-                        Are you sure to delete this event?
+                        {EVENT_DETAIL_CMS.DELETE_MODAL_MESSAGE[languageCMS]}
                     </div>
                 </div>
             </InputModal>
@@ -309,33 +312,33 @@ export default function EventDetailWidget() {
             {/* REGISTER MODAL */}
             <InputModal
                 open={displayRegisterModal}
-                textPrimary={"Confirm"}
-                textSecondary={"Cancel"}
+                textPrimary={EVENT_DETAIL_CMS.REGISTER_MODAL_PRIMARY_LABEL[languageCMS]}
+                textSecondary={EVENT_DETAIL_CMS.REGISTER_MODAL_SECONDARY_LABEL[languageCMS]}
                 onSecondary={onCancelRegisterClick}
                 onPrimary={onConfirmRegisterClick}
             >
                 <div className="grid max-w-2xl grid-cols-1 gap-x-4 gap-y-4 sm:grid-cols-6">
                     <div className="col-span-full">
                         <Input
-                            label="Full Name"
-                            rightLabel="required"
-                            placeholder="Your's full name"
+                            label={EVENT_DETAIL_CMS.REGISTER_MODAL_FULLNAME_LABEL[languageCMS]}
+                            rightLabel={EVENT_DETAIL_CMS.REQUIRED_LABEL[languageCMS]}
+                            placeholder={EVENT_DETAIL_CMS.REGISTER_MODAL_FULLNAME_PLACEHOLDER[languageCMS]}
                             {...assignedFullname}
                             {...fullnameValidation()}
                         />
                     </div>
                     <div className="col-span-full">
                         <RadioGroup
-                            label="Gender"
+                            label={EVENT_DETAIL_CMS.REGISTER_MODAL_GENDER_LABEL[languageCMS]}
                             options={[
                                 {
                                     id: MALE,
-                                    value: "Male",
+                                    value: EVENT_DETAIL_CMS.REGISTER_MODAL_MALE_GENDER_LABEL[languageCMS],
                                     isSelected: gender == MALE,
                                 },
                                 {
                                     id: FEMALE,
-                                    value: "Female",
+                                    value: EVENT_DETAIL_CMS.REGISTER_MODAL_FEMALE_GENDER_LABEL[languageCMS],
                                     isSelected: gender == FEMALE,
                                 },
                             ]}
@@ -344,8 +347,8 @@ export default function EventDetailWidget() {
                     </div>
                     <div className="col-span-full">
                         <Input
-                            label="Email"
-                            rightLabel="required"
+                            label={EVENT_DETAIL_CMS.REGISTER_MODAL_EMAIL_LABEL[languageCMS]}
+                            rightLabel={EVENT_DETAIL_CMS.REQUIRED_LABEL[languageCMS]}
                             placeholder="email@example.com"
                             {...assignedEmail}
                             {...emailValidation()}
@@ -353,8 +356,8 @@ export default function EventDetailWidget() {
                     </div>
                     <div className="col-span-full">
                         <Input
-                            label="Phone"
-                            rightLabel="required"
+                            label={EVENT_DETAIL_CMS.REGISTER_MODAL_PHONE_NUMBER_LABEL[languageCMS]}
+                            rightLabel={EVENT_DETAIL_CMS.REQUIRED_LABEL[languageCMS]}
                             placeholder="09xxxxxxxx"
                             {...assignedPhone}
                             {...phoneValidation()}

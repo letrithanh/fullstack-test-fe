@@ -11,12 +11,14 @@ const ApplicationProvider = (props: ApplicationProviderProps) => {
 
     const search = useSearch("");
     const selectedEvent = useEvent();
+    const languageCMS = "vn";
 
     return (
         <ApplicationContext.Provider 
             value={{
                 search,
-                selectedEvent
+                selectedEvent,
+                languageCMS
             }}>
             {props.children}
         </ApplicationContext.Provider>

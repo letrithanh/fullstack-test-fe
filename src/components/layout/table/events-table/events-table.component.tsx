@@ -4,6 +4,7 @@ import { CLASS_JOINER } from "@/utils/class-handler";
 import { EventsTableItem, EventsTableProps } from "./events-table.interface";
 import Pagination from "@/components/pagination/pagination.component";
 import { useState } from "react";
+import { EVENTS_TABLE_CMS } from "@/cms/events-table/events-table.cms";
 
 export default function EventsTable(props: EventsTableProps) {
 
@@ -70,7 +71,7 @@ export default function EventsTable(props: EventsTableProps) {
                     <div className="inline-block min-w-full py-2 align-middle">
                         {getEvents().length == 0 && (
                             <div className="py-4 text-base font-semibold text-gray-900 grid place-items-center">
-                                No Events
+                                {EVENTS_TABLE_CMS.NO_EVENT_LABEL[props.languageCMS]}
                             </div>
                         )}
                         {getEvents().length > 0 && (
@@ -81,32 +82,32 @@ export default function EventsTable(props: EventsTableProps) {
                                             scope="col"
                                             className="sticky top-0 z-10 border-b border-gray-300 bg-white/75 py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 backdrop-blur-sm backdrop-filter sm:pl-6 lg:pl-8"
                                         >
-                                            Title
+                                            {EVENTS_TABLE_CMS.TITLE_LABEL[props.languageCMS]}
                                         </th>
                                         <th
                                             scope="col"
                                             className="sticky top-0 z-10 border-b border-gray-300 bg-white/75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur-sm backdrop-filter sm:table-cell"
                                         >
-                                            Location
+                                            {EVENTS_TABLE_CMS.LOCATION_LABEL[props.languageCMS]}
                                         </th>
                                         <th
                                             scope="col"
                                             className="sticky top-0 z-10 hidden border-b border-gray-300 bg-white/75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur-sm backdrop-filter lg:table-cell"
                                         >
-                                            Date
+                                            {EVENTS_TABLE_CMS.DATE_LABEL[props.languageCMS]}
                                         </th>
                                         <th
                                             scope="col"
                                             className="sticky top-0 z-10 hidden border-b border-gray-300 bg-white/75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur-sm backdrop-filter lg:table-cell"
                                         >
-                                            Slot
+                                            {EVENTS_TABLE_CMS.SLOT_LABEL[props.languageCMS]}
                                         </th>
                                         <th
                                             scope="col"
                                             className="sticky top-0 z-10 border-b border-gray-300 bg-white/75 py-3.5 pr-4 pl-3 backdrop-blur-sm backdrop-filter sm:pr-6 lg:pr-8"
                                         >
                                             <span className="sr-only">
-                                                Detail
+                                                {EVENTS_TABLE_CMS.DETAIL_LABEL[props.languageCMS]}
                                             </span>
                                         </th>
                                     </tr>
@@ -171,7 +172,7 @@ export default function EventsTable(props: EventsTableProps) {
                                                     className="text-indigo-600 hover:text-indigo-900 cursor-pointer"
                                                     onClick={() => event?.onClick != null ? event.onClick(event.id) : {}}
                                                 >
-                                                    Detail
+                                                    {EVENTS_TABLE_CMS.DETAIL_LABEL[props.languageCMS]}
                                                     <span className="sr-only">
                                                         , {event.id}
                                                     </span>

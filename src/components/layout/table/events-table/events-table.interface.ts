@@ -1,3 +1,5 @@
+import { LanguageCMS } from "@/cms/language-cms.type";
+
 export interface EventsTableProps {
 
     title: string;
@@ -11,6 +13,8 @@ export interface EventsTableProps {
     events: EventsTableItem[];
 
     maxItemsPerPage?: number;
+
+    languageCMS: LanguageCMS;
 }
 
 export interface EventsTableItem {

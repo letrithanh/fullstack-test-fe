@@ -11,7 +11,7 @@ export async function PUT(request: Request) {
 }
 
 
-export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
+export async function DELETE(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
     const eventsServerService = new EventsServerService();
     await eventsServerService.deleteEvent(parseInt(id));

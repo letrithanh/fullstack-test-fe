@@ -1,0 +1,49 @@
+services:
+  frontend:
+    container_name: frontend
+    build: . # Assuming Dockerfile is in the frontend directory
+    restart: always
+    ports:
+      - 3000:3000
+    environment:
+      # This already correctly points to the backend service name
+      BACKEND_URL: http://backend:5000
+    depends_on:
+      - backend
+
+  backend:
+    container_name: backend
+    build: ../backend # Build from the backend directory
+    restart: always
+    ports:
+      # Expose backend port if needed for direct access/debugging
+      - 5000:5000
+    environment:
+      # Use service name 'db_dev' as host, internal port 3306
+      DATABASE_URL: "mysql://root:asdofhasdfh234234gdsf@db_dev:3306/devdb"
+      # Add PORT if needed, though Dockerfile EXPOSE handles container port
+      # PORT: 5000
+    depends_on:
+      - db_dev
+
+  db_dev:
+    container_name: dev_mysql_1
+    image: mysql:9.2 # Using a more specific recent version like 8.0 is often better
+    restart: always
+    # ports:
+      # Map host port 33008 to container port 3306
+      # - 33008:3306
+    volumes:
+      # Adjust volume path relative to this docker-compose file
+      - ../backend/volumes/mysql-dev-as-new:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: asdofhasdfh234234gdsf
+      MYSQL_DATABASE: devdb
+      # MYSQL_USER: dev # Keep if needed, but DATABASE_URL uses root
+      # MYSQL_PASSWORD: dev # Keep if needed, but DATABASE_URL uses root password
+
+volumes:
+  mysql-dev-data: # Define the named volume if using it instead of bind mount
+    driver: local
+
+# Note: Implicitly uses a default network, allowing services to reach each other by name.

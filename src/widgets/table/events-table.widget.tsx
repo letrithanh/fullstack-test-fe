@@ -31,7 +31,7 @@ export default function EventsTableWidget() {
             .catch((error) => {
                 console.error(error);
             });
-    }, [assignedSearch]);
+    }, [assignedSearch,]);
 
     function onAddEventClick() {
         router.push(EVENT_MANAGEMENT_PATH);
@@ -45,12 +45,16 @@ export default function EventsTableWidget() {
         }
     };
 
+    function sort(events: Event[]) {
+        return events.sort((e1, e2) => new Date(e1.date).getTime() - new Date(e2.date).getTime())
+    }
+
     return (
         <EventsTable
             title={EVENTS_TABLE_CMS.EVENTS_TITLE[languageCMS]}
             description={EVENTS_TABLE_CMS.EVENTS_DESCRIPTION[languageCMS]}
             textActionButton={EVENTS_TABLE_CMS.ADD_EVENT_BUTTON[languageCMS]}
-            events={EventsAdapter.toEventsTableItems(events, onEventClicked)}
+            events={EventsAdapter.toEventsTableItems(sort(events), onEventClicked)}
             onActionButtonClicked={onAddEventClick}
             maxItemsPerPage={5}
             languageCMS={languageCMS}

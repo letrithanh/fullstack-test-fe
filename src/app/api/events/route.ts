@@ -1,9 +1,12 @@
 import EventsServerService from "@/control/events/events-service.server";
 import { Event } from "@/entity/event/event.entity";
+import { NextRequest } from "next/server";
 
-export async function GET() {
+export async function GET(request: NextRequest) {
+    const searchParams = request.nextUrl.searchParams
+    const title = searchParams.get('title')
     const eventsServerService = new EventsServerService();
-    const events = await eventsServerService.getEvents();
+    const events = await eventsServerService.getEvents(`${title}`);
     return Response.json(events);
 }
 

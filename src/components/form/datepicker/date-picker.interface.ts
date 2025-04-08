@@ -1,3 +1,5 @@
+import { JSX } from "react";
+
 export interface DatePickerProps {
 
     date: Date;
@@ -8,7 +10,7 @@ export interface DatePickerProps {
 
     onSelectDate?: (date: Date) => void;
 
-    errorMessage?: string;
+    errorMessage?: JSX.Element;
 
     isError?: boolean;
 }

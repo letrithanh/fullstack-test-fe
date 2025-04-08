@@ -95,12 +95,22 @@ export default function EventFormWidget() {
         return checkedDate >= today;
     }
 
-    function onSelectDate(selectedDate: Date) {
-        if (isDateValid(selectedDate)) {
-            setDate(selectedDate);
-        } else {
-            setDate(new Date());
+    function dateValidation(checkedDate: Date): InputValidation {
+
+        if (!isDateValid(checkedDate)) {
+            return {
+                isError: true,
+                errorMessage: <>{EVENT_FORM_CMS.FORM_DATE_ERROR_PAST[languageCMS]}</>
+            }
         }
+
+        return {
+            isError: false
+        }
+    }
+
+    function onSelectDate(selectedDate: Date) {
+        setDate(selectedDate);
     }
 
     function locationValidation(): InputValidation {
@@ -272,8 +282,7 @@ export default function EventFormWidget() {
                                     onSelectDate={onSelectDate}
                                     date={date}
                                     key={date.toISOString()}
-                                    isError={!isDateValid(date)}
-                                    errorMessage={isDateValid(date) ? undefined : EVENT_FORM_CMS.FORM_DATE_ERROR_PAST[languageCMS]}
+                                    {...dateValidation(date)}
                                 />
                             </div>
 

@@ -4,8 +4,14 @@ import { Event } from "@/entity/event/event.entity";
 export class EventsClientService {
     private EVENTS_PATH = "/api/events"
 
-    public async getEvents() {
-        const url = `${this.EVENTS_PATH}`;
+    public async getEvents(title?: string) {
+        let url = `${this.EVENTS_PATH}`;
+
+        if (title) {
+            const query = `title=${encodeURIComponent(title)}`;
+            url += `?${query}`;
+        }
+
         const response = await fetch(url)
 
         if (!response.ok) {

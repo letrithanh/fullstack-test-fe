@@ -24,18 +24,14 @@ export default function EventsTableWidget() {
     useEffect(() => {
         const eventsClientService = new EventsClientService();
         eventsClientService
-            .getEvents()
+            .getEvents(assignedSearch.value)
             .then((onfulfilled) => {
                 setEvents([...onfulfilled]);
             })
             .catch((error) => {
                 console.error(error);
             });
-    }, []);
-
-    function filter(events: Event[]): Event[] {
-        return events.filter(event => event.title.toLowerCase().indexOf(assignedSearch.value.trim().toLowerCase()) >= 0);
-    }
+    }, [assignedSearch]);
 
     function onAddEventClick() {
         router.push(EVENT_MANAGEMENT_PATH);
@@ -54,7 +50,7 @@ export default function EventsTableWidget() {
             title={EVENTS_TABLE_CMS.EVENTS_TITLE[languageCMS]}
             description={EVENTS_TABLE_CMS.EVENTS_DESCRIPTION[languageCMS]}
             textActionButton={EVENTS_TABLE_CMS.ADD_EVENT_BUTTON[languageCMS]}
-            events={EventsAdapter.toEventsTableItems(filter(events), onEventClicked)}
+            events={EventsAdapter.toEventsTableItems(events, onEventClicked)}
             onActionButtonClicked={onAddEventClick}
             maxItemsPerPage={5}
             languageCMS={languageCMS}

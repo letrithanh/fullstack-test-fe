@@ -34,7 +34,7 @@ export default function EventsTable(props: EventsTableProps) {
             setActivePage(1)
         }
 
-        return paginatedEvents.sort((e1, e2) => new Date(e1.date).getTime() - new Date(e2.date).getTime());
+        return paginatedEvents;
     }
 
     function onPageClicked(pageNumber: number) {

@@ -6,7 +6,7 @@ export async function GET(request: NextRequest) {
     const searchParams = request.nextUrl.searchParams
     const title = searchParams.get('title')
     const eventsServerService = new EventsServerService();
-    const events = await eventsServerService.getEvents(`${title}`);
+    const events = await eventsServerService.getEvents(title as string);
     return Response.json(events);
 }
 

@@ -34,7 +34,7 @@ export default function EventsTableWidget() {
     }, []);
 
     function filter(events: Event[]): Event[] {
-        return events.filter(event => event.title.toLowerCase().indexOf(assignedSearch.value.trim()) >= 0);
+        return events.filter(event => event.title.toLowerCase().indexOf(assignedSearch.value.trim().toLowerCase()) >= 0);
     }
 
     function onAddEventClick() {
